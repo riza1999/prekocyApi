@@ -4,7 +4,8 @@ Flask-Cors==3.0.10
 Flask-RESTful==0.3.7 
 gunicorn==20.0.4 
 joblib==0.13.2 
-jsonschema==2.6.0 
+jsonschema==2.6.0
+numpy==1.19.5
 pandas==1.1.5 
 pickleshare==0.7.5
 requests==2.23.0 
