@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:5000 app:app --max-requests 2 
+web: gunicorn
