@@ -15,41 +15,7 @@ from flask_ngrok import run_with_ngrok
 from flask import Flask,jsonify,request
 from flask_cors import CORS
 
-# load phase
-tf1 = pickle.load(open("tfidfvocab.pkl", 'rb'))
-loaded_model = pickle.load(open("xgbmodel.sav", 'rb'))
-
-#load vectorizer
-vectorizer = TfidfVectorizer(binary=True,vocabulary = tf1)
-vectorizer.fit(tf1)
-
-def text_preproc(x):
-  #case folding
-  x = x.lower()
-  #remove url
-  x = re.sub(r'https*\S+', ' ', x)
-  #remove username
-  x = re.sub(r'<username>\s+', ' ', x)
-  #remove punctuation
-  x = re.sub('[%s]' % re.escape(string.punctuation), ' ', x)
-  #remove number
-  x = re.sub(r'\d', '', x)
-  #remove double space
-  x = re.sub(r'\s{2,}', ' ', x)
-  return x
-
 app = Flask(__name__)
-
-@app.route('/api/sentence', methods=["GET"])
-def sentece():
-    arr_text = []
-    text = request.args.get("text")
-    arr_text.append(text) 
-    clean_arr_text = list(map(text_preproc,arr_text))
-    x_sentence = vectorizer.transform(clean_arr_text)
-    y_pred = loaded_model.predict(x_sentence)
-    resp = jsonify({"text":text,"prediction":int(y_pred[0])})
-    return resp
 
 @app.route('/')
 def index():
