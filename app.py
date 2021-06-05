@@ -11,6 +11,21 @@ import string
 from flask import Flask,jsonify,request
 from flask_cors import CORS
 
+def text_preproc(x):
+  #case folding
+  x = x.lower()
+  #remove url
+  x = re.sub(r'https*\S+', ' ', x)
+  #remove username
+  x = re.sub(r'<username>\s+', ' ', x)
+  #remove punctuation
+  x = re.sub('[%s]' % re.escape(string.punctuation), ' ', x)
+  #remove number
+  x = re.sub(r'\d', '', x)
+  #remove double space
+  x = re.sub(r'\s{2,}', ' ', x)
+  return x
+
 app = Flask(__name__)
 
 @app.route('/')
