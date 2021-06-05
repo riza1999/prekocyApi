@@ -7,7 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1eKactgUbnbYdhlRJZqzPu-egBYfAiKXZ
 """
 import xgboost
-import pickle
 import re
 import string
 from flask import Flask,jsonify,request
