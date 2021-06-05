@@ -10,11 +10,11 @@ from flask import Flask,jsonify,request
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
 
 @app.route('/')
-def home():
-    return 'Hello World'
+def index():
+    return "<h1>Welcome to our server !!</h1>"
 
-if __name__=='__main__':
-    app.run()
+if __name__ == '__main__':
+    # Threaded option to enable multiple instances for multiple user access support
+    app.run(threaded=True, port=5000)
