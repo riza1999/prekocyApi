@@ -9,7 +9,6 @@ Original file is located at
 import re
 import string
 from flask import Flask,jsonify,request
-from flask_cors import CORS
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def text_preproc(x):
