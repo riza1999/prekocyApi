@@ -10,6 +10,8 @@ import re
 import string
 from flask import Flask,jsonify,request
 from sklearn.feature_extraction.text import TfidfVectorizer
+import xgboost
+import pickle
 
 # load phase
 tf1 = pickle.load(open("tfidfvocab.pkl", 'rb'))
