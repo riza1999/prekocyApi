@@ -12,6 +12,7 @@ from flask import Flask,jsonify,request
 from sklearn.feature_extraction.text import TfidfVectorizer
 import xgboost
 import pickle
+from flask_cors import CORS
 
 # load phase
 tf1 = pickle.load(open("tfidfvocab.pkl", 'rb'))
@@ -37,6 +38,7 @@ def text_preproc(x):
   return x
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/api/sentence', methods=["GET"])
 def sentece():
