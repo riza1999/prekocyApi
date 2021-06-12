@@ -13,6 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import xgboost
 import pickle
 from flask_cors import CORS
+import json
 
 # load phase
 tf1 = pickle.load(open("tfidfvocab.pkl", 'rb'))
@@ -41,7 +42,7 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route('/api/sentence', methods=["GET"])
-def sentece():
+def bySentece():
     arr_text = []
     text = request.args.get("text")
     arr_text.append(text) 
@@ -49,6 +50,33 @@ def sentece():
     x_sentence = vectorizer.transform(clean_arr_text)
     y_pred = loaded_model.predict(x_sentence)
     resp = jsonify({"text":text,"prediction":int(y_pred[0])})
+    return resp
+
+@app.route('/api/file', methods=["POST"])
+def byFile():
+    request_data = request.get_json()
+
+    data_komentar = request_data['data']
+    
+    arr_text = []
+
+    for f in y :
+      arr_text.append(f)
+
+    clean_arr_text = list(map(text_preproc,arr_text))
+    x_sentence = vectorizer.transform(clean_arr_text)
+    y_pred = loaded_model.predict(x_sentence)
+
+    resp = []
+    for count,f in enumerate(y_pred) :
+      x = {
+        "text": arr_text[count],
+        "prediction": int(f)
+      }
+
+      json_x = json.dumps(x)
+      resp.append(json_x)
+
     return resp
 
 @app.route('/')
