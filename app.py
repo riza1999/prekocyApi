@@ -67,6 +67,7 @@ def byFile():
     y_pred = loaded_model.predict(x_sentence)
 
     resp = []
+    x = []
     for count,f in enumerate(y_pred) :
       x['text'] = arr_text[count],
       x['prediction'] = int(f)
