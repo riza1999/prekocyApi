@@ -69,7 +69,7 @@ def byFile():
     resp = []
     x = []
     for count,f in enumerate(y_pred) :
-      x['text'] = arr_text[count],
+      x['text'] = arr_text[int(count)],
       x['prediction'] = int(f)
 
       resp.append(x)
