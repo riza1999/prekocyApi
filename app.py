@@ -68,15 +68,12 @@ def byFile():
 
     resp = []
     for count,f in enumerate(y_pred) :
-      x = {
-        "text": arr_text[count],
-        "prediction": int(f)
-      }
+      x['text'] = arr_text[count],
+      x['prediction'] = int(f)
 
-      json_x = json.dumps(x)
-      resp.append(json_x)
+      resp.append(x)
 
-    return resp
+    return jsonify({"data":resp})
 
 @app.route('/')
 def index():
