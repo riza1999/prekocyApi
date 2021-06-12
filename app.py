@@ -55,12 +55,11 @@ def bySentece():
 @app.route('/api/file', methods=["POST"])
 def byFile():
     request_data = request.get_json()
-
     data_komentar = request_data['data']
     
     arr_text = []
 
-    for f in y :
+    for f in data_komentar :
       arr_text.append(f)
 
     clean_arr_text = list(map(text_preproc,arr_text))
