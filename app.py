@@ -66,15 +66,15 @@ def byFile():
     x_sentence = vectorizer.transform(clean_arr_text)
     y_pred = loaded_model.predict(x_sentence)
 
-    resp = []
-    x = []
+    kalimats = []
+    prediksis = []
     for count,f in enumerate(y_pred) :
-      x['text'] = arr_text[int(count)],
-      x['prediction'] = int(f)
+      kalimat = arr_text[count],
+      prediksi = int(f)
+      kalimats.append(kalimat)
+      prediksis.append(prediksi)
 
-      resp.append(x)
-
-    return jsonify({"data":resp})
+    return jsonify({"text":kalimats,"prediction":prediksis})
 
 @app.route('/')
 def index():
