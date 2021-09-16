@@ -14,6 +14,8 @@ import xgboost
 import pickle
 from flask_cors import CORS
 import json
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory, StopWordRemover, ArrayDictionary
 
 # load phase
 tf1 = pickle.load(open("tfidfvocab.pkl", 'rb'))
@@ -29,13 +31,38 @@ def text_preproc(x):
   #remove url
   x = re.sub(r'https*\S+', ' ', x)
   #remove username
-  x = re.sub(r'<username>\s+', ' ', x)
+  # x = re.sub(r'<username>\s+', ' ', x)
+  #remove mention
+  x = re.sub(r'@\w+', ' ', x)
+  #remove emoji
+  x = re.sub(r'([<])(?:(?=(\\?))\2.)*?([>])', ' ', x)
+  #remove hashtag
+  x = re.sub(r'#\w+', ' ', x)
   #remove punctuation
   x = re.sub('[%s]' % re.escape(string.punctuation), ' ', x)
   #remove number
   x = re.sub(r'\d', '', x)
   #remove double space
   x = re.sub(r'\s{2,}', ' ', x)
+  return x
+
+#stopword
+stop_factory = StopWordRemoverFactory().get_stop_words() #load default stopword
+more_stopword = ['yak','yg','udh','banget','tuh','ajah','lu','loe','lo','lg','gue','gw','ama','ttp','tetap','nih','aja','tu','ny','ah','saya','lah','nya','di','gitu','yang','ya','yaa','si','username','dia','jd','deh','sm','itu'] #menambahkan stopword
+data = stop_factory + more_stopword #menggabungkan stopword
+dictionary = ArrayDictionary(data)
+stopwordplus = StopWordRemover(dictionary)
+
+def remove_stopwording(x):
+  x = stopwordplus.remove(x)
+  return x
+
+#stemming
+factory = StemmerFactory()
+stemmer = factory.create_stemmer()
+
+def stemming_word(x):
+  x = stemmer.stem(x)
   return x
 
 app = Flask(__name__)
@@ -47,7 +74,9 @@ def bySentece():
     text = request.args.get("text")
     arr_text.append(text) 
     clean_arr_text = list(map(text_preproc,arr_text))
-    x_sentence = vectorizer.transform(clean_arr_text)
+    clean_arr_text_stopword = list(map(text_preproc,clean_arr_text))
+    clean_arr_text_stopword_stemming = list(map(text_preproc,clean_arr_text_stopword))
+    x_sentence = vectorizer.transform(clean_arr_text_stopword_stemming)
     y_pred = loaded_model.predict(x_sentence)
     resp = jsonify({"text":text,"prediction":int(y_pred[0])})
     return resp
@@ -63,7 +92,9 @@ def byFile():
       arr_text.append(f)
 
     clean_arr_text = list(map(text_preproc,arr_text))
-    x_sentence = vectorizer.transform(clean_arr_text)
+    clean_arr_text_stopword = list(map(text_preproc,clean_arr_text))
+    clean_arr_text_stopword_stemming = list(map(text_preproc,clean_arr_text_stopword))
+    x_sentence = vectorizer.transform(clean_arr_text_stopword_stemming)
     y_pred = loaded_model.predict(x_sentence)
 
     kalimats = []
