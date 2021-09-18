@@ -78,7 +78,7 @@ def bySentece():
     clean_arr_text_stopword_stemming = list(map(stemming_word,clean_arr_text_stopword))
     x_sentence = vectorizer.transform(clean_arr_text_stopword_stemming)
     y_pred = loaded_model.predict(x_sentence)
-    resp = jsonify({"text":text,"prediction":int(y_pred[0]),"test":clean_arr_text_stopword_stemming})
+    resp = jsonify({"text":text,"prediction":int(y_pred[0])})
     return resp
 
 @app.route('/api/file', methods=["POST"])
